@@ -1,0 +1,10 @@
+steps:
+  - name: 'maven:3.9.5-eclipse-temurin-17'
+    entrypoint: 'mvn'
+    args: ['clean', 'package', '-DskipTests']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: ['app', 'deploy', '--quiet', 'app.yaml', 'target/sicca-0.0.1-SNAPSHOT.jar']
+
+timeout: 900s

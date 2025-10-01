@@ -1,0 +1,26 @@
+package com.sicca.model.cultivo;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "parametro_cultivo")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ParametroCultivoEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false)
+    private Double valor;
+
+    @Column(name = "unidad_medida")
+    private Integer unidadMedida;
+}
