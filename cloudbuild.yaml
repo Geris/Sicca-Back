@@ -5,7 +5,7 @@ steps:
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
-    args: ['app', 'deploy', '--quiet', 'app.yaml', 'target/sicca-1.0.0.jar']
+    args: ['app', 'deploy', '--quiet', 'target/sicca-1.0.0.jar']
 
 timeout: 900s
 
