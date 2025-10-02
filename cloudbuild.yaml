@@ -1,13 +1,31 @@
 steps:
-  - name: 'maven:3.9.5-eclipse-temurin-21'
-    entrypoint: 'mvn'
-    args: ['clean', 'package', '-Pprod', '-DskipTests']
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'package', '-DskipTests']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build', '-t',
+        'us-south1-docker.pkg.dev/sicca-473900/springboot-repo/sicca-backend',
+        '.'
+      ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        'us-south1-docker.pkg.dev/sicca-473900/springboot-repo/sicca-backend'
+      ]
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
-    args: ['app', 'deploy', '--quiet', 'target/sicca-1.0.0.jar']
-
-timeout: 900s
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+    args:
+      [
+        'run', 'deploy', 'sicca-backend',
+        '--image', 'us-south1-docker.pkg.dev/sicca-473900/springboot-repo/sicca-backend',
+        '--region', 'us-south1',
+        '--platform', 'managed',
+        '--allow-unauthenticated',
+        '--add-cloudsql-instances', 'sicca-473900:us-south1:sicca-db',
+        '--set-env-vars', 'SPRING_PROFILES_ACTIVE=prod'
+      ]
