@@ -1,2 +1,2 @@
 runtime: java21
-entrypoint: java -Dspring.profiles.active=prod -jar sicca-0.0.1-SNAPSHOT.jar
+entrypoint: java -Dspring.profiles.active=prod -jar sicca-1.0.0.jar
