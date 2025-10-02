@@ -12,9 +12,9 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*") // Permitir todos los orígenes
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // Permitir los métodos necesarios
-                .allowedHeaders("*") // Permitir todos los headers
-                .allowCredentials(true) // Permitir credenciales (si es necesario)
-                .maxAge(3600); // Configura el tiempo máximo de cache de la preflight request
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
     }
 
 }
