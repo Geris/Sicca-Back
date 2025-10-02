@@ -1,5 +1,5 @@
 options:
-  logging: ${_LOGGING}
+  logging: CLOUD_LOGGING_ONLY
 
 steps:
   # Paso 1: Compilar usando el wrapper
