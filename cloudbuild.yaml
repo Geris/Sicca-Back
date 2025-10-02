@@ -1,0 +1,39 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  # Paso 1: Compilar usando el wrapper
+  - name: 'maven:3.9-eclipse-temurin-21'
+    entrypoint: 'bash'
+    args: [ '-c', './mvnw clean package -DskipTests' ]
+
+  # Paso 2: Construir la imagen Docker
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build', '-t',
+        'us-south1-docker.pkg.dev/sicca-473900/springboot-repo/sicca-backend',
+        '.'
+      ]
+
+  # Paso 3: Subir la imagen al Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        'us-south1-docker.pkg.dev/sicca-473900/springboot-repo/sicca-backend'
+      ]
+
+  # Paso 4: Desplegar a Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      [
+        'run', 'deploy', 'sicca-backend',
+        '--image', 'us-south1-docker.pkg.dev/sicca-473900/springboot-repo/sicca-backend',
+        '--region', 'us-south1',
+        '--platform', 'managed',
+        '--allow-unauthenticated',
+        '--add-cloudsql-instances', 'sicca-473900:us-south1:sicca-db',
+        '--set-env-vars', 'SPRING_PROFILES_ACTIVE=prod'
+      ]

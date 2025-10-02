@@ -1,0 +1,21 @@
+# Ignore Maven/Gradle build output
+build/
+
+# Git
+.git/
+.gitignore
+
+# IDE config
+*.iml
+.idea/
+
+# Logs
+*.log
+
+# Node stuff (if present)
+node_modules/
+
+# Misc
+*.class
+.DS_Store
+*.swp
