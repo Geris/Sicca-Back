@@ -1,2 +1,0 @@
-runtime: java21
-entrypoint: java -Dspring.profiles.active=prod -jar sicca-1.0.0.jar
