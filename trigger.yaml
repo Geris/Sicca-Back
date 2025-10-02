@@ -1,0 +1,10 @@
+name: sicca-cd
+description: Trigger para compilar Sicca
+github:
+  owner: Geris
+  name: Sicca-Back
+  push:
+    branch: main
+filename: cloudbuild.yaml
+substitutions:
+  _LOGGING: CLOUD_LOGGING_ONLY

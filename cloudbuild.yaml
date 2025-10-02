@@ -1,3 +1,6 @@
+options:
+  logging: ${_LOGGING}
+
 steps:
   # Paso 1: Compilar usando el wrapper
   - name: 'maven:3.9-eclipse-temurin-21'
