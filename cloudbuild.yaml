@@ -1,7 +1,10 @@
 steps:
-  - name: 'gcr.io/cloud-builders/mvn'
-    args: ['clean', 'package', '-DskipTests']
+  # Paso 1: Compilar usando el wrapper
+  - name: 'maven:3.9-eclipse-temurin-21'
+    entrypoint: 'bash'
+    args: [ '-c', './mvnw clean package -DskipTests' ]
 
+  # Paso 2: Construir la imagen Docker
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
@@ -10,6 +13,7 @@ steps:
         '.'
       ]
 
+  # Paso 3: Subir la imagen al Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
@@ -17,6 +21,7 @@ steps:
         'us-south1-docker.pkg.dev/sicca-473900/springboot-repo/sicca-backend'
       ]
 
+  # Paso 4: Desplegar a Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     args:
