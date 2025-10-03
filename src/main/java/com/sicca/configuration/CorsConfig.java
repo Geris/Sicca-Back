@@ -1,4 +1,4 @@
-package com.sicca.sicca.configuration;
+package com.sicca.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
