@@ -24,11 +24,12 @@ public class AlertaEntity {
     @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime fechaHora;
 
-    @Column(nullable = false, length = 50)
-    private String tipo;
-
     @Column(length = 50)
     private String severidad;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo", nullable = false)
+    private AlertaTipo alertaTipo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cultivo", nullable = false)

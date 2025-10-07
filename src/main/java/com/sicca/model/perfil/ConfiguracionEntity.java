@@ -18,12 +18,13 @@ public class ConfiguracionEntity {
     private Integer id;
 
     @Column(nullable = false, length = 50)
-    private String nombre;
-
-    @Column(nullable = false, length = 50)
     private String valor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_perfil", nullable = false)
     private PerfilEntity perfil;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_configuracion_tipo", nullable = false)
+    private ConfiguracionTipoEntity configuracionTipo;
 }

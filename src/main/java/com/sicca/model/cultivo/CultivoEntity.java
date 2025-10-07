@@ -2,7 +2,7 @@ package com.sicca.model.cultivo;
 
 import com.sicca.model.imagen.ImagenEntity;
 import com.sicca.model.invernadero.InvernaderoEntity;
-import com.sicca.model.sensor.SensorEntity;
+import com.sicca.model.iot.MicrocontroladorEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,10 +45,6 @@ public class CultivoEntity {
     private EspecieEntity especie;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estado_crecimiento")
-    private EstadoCrecimientoEntity estadoCrecimiento;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_invernadero", nullable = false)
     private InvernaderoEntity invernadero;
 
@@ -60,8 +56,9 @@ public class CultivoEntity {
     private List<AlertaEntity> alertas;
 
     @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SensorEntity> sensores;
-
-    @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImagenEntity> imagenes;
+
+    @OneToOne
+    @JoinColumn(name = "microcontrolador_id") // Clave foránea en la tabla Usuario
+    private MicrocontroladorEntity microcontrolador;
 }

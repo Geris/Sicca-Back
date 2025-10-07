@@ -1,7 +1,7 @@
 package com.sicca.service;
 
-import com.sicca.dto.sensor.SensorDTO;
-import com.sicca.dto.sensor.SensorLecturaDTO;
+import com.sicca.dto.requests.iot.SensorRequest;
+import com.sicca.dto.requests.iot.SensorLecturaDTO;
 import com.sicca.model.sensor.SensorEntity;
 import com.sicca.model.sensor.SensorLecturaEntity;
 import com.sicca.repository.SensorLecturaRepository;
@@ -22,15 +22,15 @@ public class IOTService {
     private final ModelMapper mapper;
 
     // Sensores
-    public List<SensorDTO> listarSensores() {
+    public List<SensorRequest> listarSensores() {
         return sensorRepository.findAll().stream()
-                .map(e -> mapper.map(e, SensorDTO.class))
+                .map(e -> mapper.map(e, SensorRequest.class))
                 .collect(Collectors.toList());
     }
 
-    public SensorDTO crearSensor(SensorDTO dto) {
+    public SensorRequest crearSensor(SensorRequest dto) {
         SensorEntity entity = mapper.map(dto, SensorEntity.class);
-        return mapper.map(sensorRepository.save(entity), SensorDTO.class);
+        return mapper.map(sensorRepository.save(entity), SensorRequest.class);
     }
 
     // Lecturas

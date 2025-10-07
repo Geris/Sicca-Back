@@ -1,14 +1,14 @@
 package com.sicca.usecase;
 
-import com.sicca.dto.imagen.ResultadoIADTO;
+import com.sicca.dto.requests.imagen.ResultadoIARequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class AnalizarImagenUseCase {
 
-    public ResultadoIADTO execute(MultipartFile file) {
+    public ResultadoIARequest execute(MultipartFile file) {
 
-        return new ResultadoIADTO();
+        return new ResultadoIARequest();
     }
 }

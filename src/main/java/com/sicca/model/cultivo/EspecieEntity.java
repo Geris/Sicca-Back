@@ -20,7 +20,7 @@ public class EspecieEntity {
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String nombreCientifico;
 
 

@@ -1,6 +1,6 @@
 package com.sicca.service;
 
-import com.sicca.dto.invernadero.InvernaderoDTO;
+import com.sicca.dto.requests.invernadero.InvernaderoRequest;
 import com.sicca.model.invernadero.InvernaderoEntity;
 import com.sicca.repository.InvernaderoRepository;
 import lombok.AllArgsConstructor;
@@ -17,31 +17,31 @@ public class InvernaderoService {
     private final InvernaderoRepository repository;
     private final ModelMapper mapper;
 
-    public List<InvernaderoDTO> listar() {
+    public List<InvernaderoRequest> listar() {
         return repository.findAll().stream()
-                .map(e -> mapper.map(e, InvernaderoDTO.class))
+                .map(e -> mapper.map(e, InvernaderoRequest.class))
                 .collect(Collectors.toList());
     }
 
-    public InvernaderoDTO obtenerPorId(Long id) {
+    public InvernaderoRequest obtenerPorId(Integer id) {
         return repository.findById(id)
-                .map(e -> mapper.map(e, InvernaderoDTO.class))
+                .map(e -> mapper.map(e, InvernaderoRequest.class))
                 .orElse(null);
     }
 
-    public InvernaderoDTO crear(InvernaderoDTO dto) {
+    public InvernaderoRequest crear(InvernaderoRequest dto) {
         InvernaderoEntity entity = mapper.map(dto, InvernaderoEntity.class);
-        return mapper.map(repository.save(entity), InvernaderoDTO.class);
+        return mapper.map(repository.save(entity), InvernaderoRequest.class);
     }
 
-    public void eliminar(Long id) {
+    public void eliminar(Integer id) {
         repository.deleteById(id);
     }
 
-    public List<InvernaderoDTO> obtenerPorPerfilId(Long perfilId) {
+    public List<InvernaderoRequest> obtenerPorPerfilId(Long perfilId) {
         List<InvernaderoEntity> invernaderoEntities = repository.findByPerfilId(perfilId);
         return invernaderoEntities.stream()
-                .map(entity -> mapper.map(entity, InvernaderoDTO.class))
+                .map(entity -> mapper.map(entity, InvernaderoRequest.class))
                 .collect(Collectors.toList());
     }
 }

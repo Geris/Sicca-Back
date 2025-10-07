@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface InvernaderoRepository extends JpaRepository<InvernaderoEntity, Long> {
-
+public interface InvernaderoRepository extends JpaRepository<InvernaderoEntity, Integer> {
     List<InvernaderoEntity> findByPerfilId(Long perfilId);
 }

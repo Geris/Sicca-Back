@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ResultadoIARepository extends JpaRepository<ResultadoIAEntity, Long> {
+public interface ResultadoIARepository extends JpaRepository<ResultadoIAEntity, Integer> {
 }

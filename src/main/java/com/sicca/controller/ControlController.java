@@ -1,6 +1,6 @@
 package com.sicca.controller;
 
-import com.sicca.dto.iot.ComandoDTO;
+import com.sicca.dto.requests.iot.ComandoRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/control")
 public class ControlController {
 
-    private ComandoDTO ultimoComando = new ComandoDTO(); // estado actual
+    private ComandoRequest ultimoComando = new ComandoRequest(); // estado actual
 
     @PostMapping
-    public ResponseEntity<String> recibirComando(@RequestBody ComandoDTO comando) {
+    public ResponseEntity<String> recibirComando(@RequestBody ComandoRequest comando) {
         this.ultimoComando = comando;
         System.out.println("Nuevo comando recibido:");
         System.out.println("Luz: " + comando.isLuz());
@@ -21,7 +21,7 @@ public class ControlController {
     }
 
     @GetMapping
-    public ComandoDTO enviarComando() {
+    public ComandoRequest enviarComando() {
         return ultimoComando;
     }
 }
