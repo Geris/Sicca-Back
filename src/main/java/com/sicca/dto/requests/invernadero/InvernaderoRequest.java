@@ -14,9 +14,5 @@ import java.time.LocalDateTime;
 public class InvernaderoRequest {
     private String nombre;
     private String ubicacion;
-    private LocalDateTime fechaActualizacion;
-    private LocalDateTime fechaCreacion;
-    private Integer estadoId;
     private Integer perfilId;
-    private Integer cultivosId;
 }

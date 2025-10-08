@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EstadoPerfilRepository extends JpaRepository<EstadoPerfilEntity, Integer> {
+
+    EstadoPerfilEntity findByNombre(String valor);
 }

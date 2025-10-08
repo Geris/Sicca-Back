@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "estado_invernadero")
+@Table(name = "parametro_tipo")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

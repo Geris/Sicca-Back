@@ -19,5 +19,4 @@ public class InvernaderoResponse {
     private LocalDateTime fechaCreacion;
     private Integer estadoId;
     private Integer perfilId;
-    private Integer cultivosId;
 }

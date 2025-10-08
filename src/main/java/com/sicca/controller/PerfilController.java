@@ -1,13 +1,14 @@
 package com.sicca.controller;
 
 import com.sicca.dto.requests.perfil.PerfilRequest;
+import com.sicca.dto.responses.perfil.EstadoPerfilResponse;
+import com.sicca.dto.responses.perfil.PerfilResponse;
+import com.sicca.enums.EstadoPerfil;
 import com.sicca.service.PerfilService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/perfil")
@@ -17,22 +18,24 @@ public class PerfilController {
 
     private final PerfilService service;
 
-    @GetMapping
-    public List<PerfilRequest> listar() {
-        log.error("listando....");
-        return service.listar();
-    }
-
     @PostMapping
-    public PerfilRequest crear(@RequestBody PerfilRequest dto) {
-        return service.crear(dto);
+    public ResponseEntity<PerfilResponse> crear(@RequestBody PerfilRequest dto) {
+        return ResponseEntity.ok(service.crear(dto));
     }
 
     @PostMapping(value = "/login")
-    public PerfilRequest login(String usuario, String password){
-        return service.login(usuario, password);
+    public ResponseEntity<PerfilResponse> login(@RequestParam String usuario, @RequestParam String password){
+        return ResponseEntity.ok(service.login(usuario, password));
     }
 
+    @PostMapping(value = "/estado")
+    public ResponseEntity<EstadoPerfilResponse> crearEstadoPerfil(@RequestParam EstadoPerfil estado){
+        return ResponseEntity.ok(service.crearEstadoPerfil(estado));
+    }
 
+    @PutMapping(value = "/estado")
+    public ResponseEntity<PerfilResponse> actualizarEstadoPerfil(@RequestParam Integer perfilId, @RequestParam EstadoPerfil estado){
+        return ResponseEntity.ok(service.cambiarEstadoPerfil(perfilId, estado));
+    }
 }
 

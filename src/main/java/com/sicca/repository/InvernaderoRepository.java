@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface InvernaderoRepository extends JpaRepository<InvernaderoEntity, Integer> {
-    List<InvernaderoEntity> findByPerfilId(Long perfilId);
+    List<InvernaderoEntity> findByPerfilId(Integer perfilId);
 }

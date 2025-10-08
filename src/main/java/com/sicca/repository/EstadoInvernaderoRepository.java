@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EstadoInvernaderoRepository extends JpaRepository<EstadoInvernaderoEntity, Integer> {
+
+    EstadoInvernaderoEntity findByNombre(String valor);
 }

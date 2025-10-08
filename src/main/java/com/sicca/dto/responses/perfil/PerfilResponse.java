@@ -20,5 +20,5 @@ public class PerfilResponse {
     private String telefono;
     private LocalDateTime fechaRegistro;
     private LocalDateTime ultimaModificacion;
-    private Integer estadoId;
+    private EstadoPerfilResponse estadoPerfil;
 }

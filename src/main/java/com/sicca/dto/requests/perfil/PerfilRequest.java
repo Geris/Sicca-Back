@@ -17,7 +17,4 @@ public class PerfilRequest {
     private String direccion;
     private String password;
     private String telefono;
-    private LocalDateTime fechaRegistro;
-    private LocalDateTime ultimaModificacion;
-    private Integer estadoId;
 }
