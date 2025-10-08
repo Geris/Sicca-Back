@@ -1,9 +1,9 @@
 package com.sicca.service;
 
 
-import com.sicca.dto.cultivo.CultivoDTO;
-import com.sicca.dto.imagen.ImagenDTO;
-import com.sicca.dto.imagen.ResultadoIADTO;
+import com.sicca.dto.requests.cultivo.CultivoRequest;
+import com.sicca.dto.requests.imagen.ImagenRequest;
+import com.sicca.dto.requests.imagen.ResultadoIARequest;
 import com.sicca.model.cultivo.CultivoEntity;
 import com.sicca.repository.CultivoRepository;
 import com.sicca.usecase.AnalizarImagenUseCase;
@@ -25,31 +25,30 @@ public class CultivoService {
     private final ModelMapper mapper;
     private final AnalizarImagenUseCase analizarImagenUseCase;
 
-    public List<CultivoDTO> listar() {
+    public List<CultivoRequest> listar() {
         return repository.findAll().stream()
-                .map(e -> mapper.map(e, CultivoDTO.class))
+                .map(e -> mapper.map(e, CultivoRequest.class))
                 .collect(Collectors.toList());
     }
 
-    public CultivoDTO crear(CultivoDTO dto) {
+    public CultivoRequest crear(CultivoRequest dto) {
         CultivoEntity entity = mapper.map(dto, CultivoEntity.class);
-        return mapper.map(repository.save(entity), CultivoDTO.class);
+        return mapper.map(repository.save(entity), CultivoRequest.class);
     }
 
-    public CultivoDTO obtenerPorId(Integer id) {
-        Optional<CultivoEntity> entity = repository.findById(Long.valueOf(id));
+    public CultivoRequest obtenerPorId(Integer id) {
+        Optional<CultivoEntity> entity = repository.findById(id);
         if(entity.isPresent()){
-            return mapper.map(entity, CultivoDTO.class);
+            return mapper.map(entity, CultivoRequest.class);
         }
-        return new CultivoDTO();
+        return new CultivoRequest();
     }
 
-    public ImagenDTO analizarImagen(Integer cultivoId, MultipartFile file) {
-        ResultadoIADTO resultadoAnalisis = analizarImagenUseCase.execute(file);
-        ImagenDTO imagenDTO = ImagenDTO.builder()
+    public ImagenRequest analizarImagen(Integer cultivoId, MultipartFile file) {
+        ResultadoIARequest resultadoAnalisis = analizarImagenUseCase.execute(file);
+        ImagenRequest imagenDTO = ImagenRequest.builder()
                 .ruta("ruta generica")
                 .fechaCaptura(LocalDateTime.now())
-                .resultadoIA(resultadoAnalisis)
                 .cultivoId(cultivoId)
                 .build();
         return imagenDTO;

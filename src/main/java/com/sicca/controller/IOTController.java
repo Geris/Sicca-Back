@@ -1,6 +1,7 @@
 package com.sicca.controller;
-import com.sicca.dto.sensor.SensorDTO;
-import com.sicca.dto.sensor.SensorLecturaDTO;
+
+import com.sicca.dto.requests.iot.SensorRequest;
+import com.sicca.dto.requests.iot.SensorLecturaDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.sicca.service.IOTService;
@@ -15,12 +16,12 @@ public class IOTController {
 
     // Sensores
     @GetMapping("/sensores")
-    public List<SensorDTO> listarSensores() {
+    public List<SensorRequest> listarSensores() {
         return service.listarSensores();
     }
 
     @PostMapping("/sensores")
-    public SensorDTO crearSensor(@RequestBody SensorDTO dto) {
+    public SensorRequest crearSensor(@RequestBody SensorRequest dto) {
         return service.crearSensor(dto);
     }
 

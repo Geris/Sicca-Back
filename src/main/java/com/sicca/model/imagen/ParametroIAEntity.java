@@ -1,6 +1,6 @@
 package com.sicca.model.imagen;
 
-import com.sicca.model.ParametroCultivoIAEntity;
+import com.sicca.model.ParametroTipoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +26,9 @@ public class ParametroIAEntity {
     @JoinColumn(name = "id_resultado", nullable = false)
     private ResultadoIAEntity resultado;
 
-    // Relación con tabla intermedia
-    @OneToMany(mappedBy = "parametroIA", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<ParametroCultivoIAEntity> parametrosCultivo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo", nullable = false)
+    private ParametroTipoEntity tipoParametro;
+
+
 }

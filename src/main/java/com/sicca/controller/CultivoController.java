@@ -1,7 +1,7 @@
 package com.sicca.controller;
 
-import com.sicca.dto.cultivo.CultivoDTO;
-import com.sicca.dto.imagen.ImagenDTO;
+import com.sicca.dto.requests.cultivo.CultivoRequest;
+import com.sicca.dto.requests.imagen.ImagenRequest;
 import com.sicca.service.CultivoService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
@@ -17,18 +17,18 @@ public class CultivoController {
 
     @GetMapping
     @Operation(summary = "Obtener un cultivo por id")
-    public CultivoDTO obtenerPorId(@RequestParam Integer id) {
+    public CultivoRequest obtenerPorId(@RequestParam Integer id) {
         return service.obtenerPorId(id);
     }
 
     @PostMapping
-    public CultivoDTO crear(@RequestBody CultivoDTO dto) {
+    public CultivoRequest crear(@RequestBody CultivoRequest dto) {
         return service.crear(dto);
     }
 
     @PostMapping(value = "/imagen", consumes = "multipart/form-data")
-    public ImagenDTO analizarImagen(@RequestParam("cultivoId") Integer cultivoId,
-                                    @RequestParam("file") MultipartFile file) {
+    public ImagenRequest analizarImagen(@RequestParam("cultivoId") Integer cultivoId,
+                                        @RequestParam("file") MultipartFile file) {
         return service.analizarImagen(cultivoId, file);
     }
 }

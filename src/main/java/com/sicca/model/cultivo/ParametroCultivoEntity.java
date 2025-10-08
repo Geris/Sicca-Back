@@ -1,5 +1,7 @@
 package com.sicca.model.cultivo;
 
+import com.sicca.model.ParametroTipoEntity;
+import com.sicca.model.invernadero.EstadoInvernaderoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +25,8 @@ public class ParametroCultivoEntity {
 
     @Column(name = "unidad_medida")
     private Integer unidadMedida;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo", nullable = false)
+    private ParametroTipoEntity tipoParametro;
 }

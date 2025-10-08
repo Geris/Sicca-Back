@@ -1,11 +1,10 @@
 package com.sicca.controller;
 
-import com.sicca.dto.iot.DatoSensorDTO;
+import com.sicca.dto.requests.iot.DatoSensorRequest;
 import com.sicca.model.iot.DatoSensorEntity;
 import com.sicca.service.DatoSensorService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -19,16 +18,7 @@ public class ArduinoController {
     }
 
     @PostMapping
-    public String recibirSensores(@RequestBody List<DatoSensorDTO> datos) {
-        for (DatoSensorDTO dto : datos) {
-            DatoSensorEntity entidad = new DatoSensorEntity();
-            entidad.setSensorId(dto.getId());
-            entidad.setValor(dto.getValor());
-            entidad.setTimestamp(LocalDateTime.parse(dto.getTimestamp()));
-
-            service.guardar(entidad);
-        }
-
+    public String recibirSensores(@RequestBody List<DatoSensorRequest> datos) {
         return "Datos recibidos correctamente";
     }
 

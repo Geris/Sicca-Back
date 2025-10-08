@@ -6,11 +6,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "invernadero")
 @Data
 @NoArgsConstructor
@@ -27,11 +31,13 @@ public class InvernaderoEntity {
     @Column(length = 50)
     private String ubicacion;
 
-    @Column(name = "fecha_actualizacion")
-    private LocalDate fechaActualizacion;
+    @CreatedDate
+    @Column(name = "fecha_registro")
+    private LocalDateTime fechaRegistro;
 
-    @Column(name = "fecha_creacion")
-    private LocalDate fechaCreacion;
+    @LastModifiedDate
+    @Column(name = "ultima_modificacion")
+    private LocalDateTime ultimaModificacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estado", nullable = false)

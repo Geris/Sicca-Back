@@ -1,0 +1,15 @@
+package com.sicca.dto.requests;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ParametroTipoRequest {
+    private String nombre;
+    private String descripcion;
+}
