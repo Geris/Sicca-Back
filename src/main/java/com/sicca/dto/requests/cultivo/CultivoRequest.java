@@ -1,5 +1,7 @@
 package com.sicca.dto.requests.cultivo;
 
+import com.sicca.enums.EspecieCultivo;
+import com.sicca.enums.TipoCultivo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,11 +18,6 @@ public class CultivoRequest {
     private LocalDate fechaFin;
     private String descripcion;
     private String tipo;
-    private String severidad;
     private Integer especieId;
     private Integer invernaderoId;
-    private Integer parametroCultivoId;
-    private Integer alertasId;
-    private Integer imagenesId;
-    private Integer microcontroladorId;
 }

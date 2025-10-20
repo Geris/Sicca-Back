@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,4 +17,5 @@ public class ResultadoIAResponse {
     private String diagnostico;
     private String recomendacion;
     private Integer imagenId;
+    private List<ParametroIAResponse> parametrosIA;
 }

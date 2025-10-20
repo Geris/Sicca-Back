@@ -5,6 +5,7 @@ import com.sicca.model.invernadero.InvernaderoEntity;
 import com.sicca.model.iot.MicrocontroladorEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CultivoEntity {
 
     @Id
@@ -41,16 +43,15 @@ public class CultivoEntity {
     private String severidad;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "especie", nullable = false)
+    @JoinColumn(name = "id_especie", nullable = false)
     private EspecieEntity especie;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_invernadero", nullable = false)
     private InvernaderoEntity invernadero;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_parametro_cultivo")
-    private ParametroCultivoEntity parametroCultivo;
+    @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ParametroCultivoEntity> parametroCultivo;
 
     @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AlertaEntity> alertas;
@@ -59,6 +60,6 @@ public class CultivoEntity {
     private List<ImagenEntity> imagenes;
 
     @OneToOne
-    @JoinColumn(name = "microcontrolador_id") // Clave foránea en la tabla Usuario
+    @JoinColumn(name = "microcontrolador_id")
     private MicrocontroladorEntity microcontrolador;
 }

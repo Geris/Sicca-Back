@@ -15,7 +15,6 @@ public class ImagenResponse {
     private Integer id;
     private String ruta;
     private LocalDateTime fechaCaptura;
-    private Integer resultado;
     private Integer cultivoId;
     private Integer resultadoIAId;
 }

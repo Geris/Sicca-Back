@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class ImagenRequest {
     private String ruta;
     private LocalDateTime fechaCaptura;
-    private Integer resultado;
     private Integer cultivoId;
     private Integer resultadoIAId;
 }
