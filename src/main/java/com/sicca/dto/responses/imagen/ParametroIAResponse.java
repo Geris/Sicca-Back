@@ -1,5 +1,6 @@
 package com.sicca.dto.responses.imagen;
 
+import com.sicca.dto.responses.ParametroTipoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,6 @@ public class ParametroIAResponse {
     private Integer id;
     private Double valor;
     private Integer unidadMedida;
-    private Integer resultadoId;
-    private Integer tipoParametroId;
+    //private ResultadoIAResponse resultado;
+    private ParametroTipoResponse tipoParametro;
 }

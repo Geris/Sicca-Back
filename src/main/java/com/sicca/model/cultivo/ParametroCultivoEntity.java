@@ -27,6 +27,10 @@ public class ParametroCultivoEntity {
     private Integer unidadMedida;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cultivo")
+    private CultivoEntity cultivo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo", nullable = false)
     private ParametroTipoEntity tipoParametro;
 }
