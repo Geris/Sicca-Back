@@ -18,11 +18,7 @@ public class CultivoResponse {
     private LocalDate fechaFin;
     private String descripcion;
     private String tipo;
-    private String severidad;
     private Integer especieId;
     private Integer invernaderoId;
-    private Integer parametroCultivoId;
-    private Integer alertasId;
-    private Integer imagenesId;
     private Integer microcontroladorId;
 }

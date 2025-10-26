@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TipoSensorRepository extends JpaRepository<TipoSensorEntity, Integer> {
+    TipoSensorEntity findByNombre(String valor);
 }

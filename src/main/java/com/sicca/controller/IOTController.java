@@ -1,7 +1,6 @@
 package com.sicca.controller;
 
 import com.sicca.dto.requests.iot.SensorLecturaDTO;
-import com.sicca.dto.requests.iot.SensorRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.sicca.service.IOTService;

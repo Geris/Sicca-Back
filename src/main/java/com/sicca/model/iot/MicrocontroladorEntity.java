@@ -4,6 +4,7 @@ package com.sicca.model.iot;
 import com.sicca.model.sensor.SensorEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class MicrocontroladorEntity {
 
     @Id
