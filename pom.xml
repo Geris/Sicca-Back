@@ -18,6 +18,8 @@
 		<java.version>21</java.version>
         <projectVersion>dev-1.0.0</projectVersion> <!-- default -->
         <spring.profiles.active>dev</spring.profiles.active>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	<dependencies>
         <dependency>
