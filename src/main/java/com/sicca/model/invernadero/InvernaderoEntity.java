@@ -33,11 +33,11 @@ public class InvernaderoEntity {
 
     @CreatedDate
     @Column(name = "fecha_registro")
-    private LocalDateTime fechaRegistro;
+    private LocalDateTime fechaCreacion;
 
     @LastModifiedDate
     @Column(name = "ultima_modificacion")
-    private LocalDateTime ultimaModificacion;
+    private LocalDateTime fechaActualizacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estado", nullable = false)

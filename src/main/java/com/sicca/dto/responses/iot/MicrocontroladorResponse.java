@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MicrocontroladorResponse {
-    private Long id;
+    private Integer id;
     private String nombre;
-    private String codigoSerial;
     private String descripcion;
-    private Integer sensoresId;
+    private String codigoSerial;
 }

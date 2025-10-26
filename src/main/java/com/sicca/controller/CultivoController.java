@@ -63,8 +63,8 @@ public class CultivoController {
     @PostMapping(value = "/enlazar")
     @Operation(summary = "Enlaza un cultivo con un microcontrolador")
     public ResponseEntity<Void> analyze(@RequestParam("cultivoId") Integer cultivoId,
-                                     @RequestBody MicrocontroladorRequest microcontrolador) {
-        service.enlazarMicrocontrolador(cultivoId, microcontrolador);
+                                        @RequestParam("microcontroladorId") Integer microcontroladorId) {
+        service.enlazarMicrocontrolador(cultivoId, microcontroladorId);
         return ResponseEntity.noContent().build();
     }
 

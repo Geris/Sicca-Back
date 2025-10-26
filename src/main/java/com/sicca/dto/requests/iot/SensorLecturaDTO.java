@@ -1,19 +1,21 @@
 package com.sicca.dto.requests.iot;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
-
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 public class SensorLecturaDTO {
-    private String nombre;
-    private Integer sensorId;
-    private Double valor;
-    private LocalDateTime fechaMedicion;
+    private String id;     // p.ej. "luz-ambient", "temp-ambient", "humedad-1"
+    private Double valor;  // lectura numérica
+
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+
+    public Double getValor() { return valor; }
+    public void setValor(Double valor) { this.valor = valor; }
 }

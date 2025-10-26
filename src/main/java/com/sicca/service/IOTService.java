@@ -1,7 +1,7 @@
 package com.sicca.service;
 
-import com.sicca.dto.requests.iot.SensorRequest;
 import com.sicca.dto.requests.iot.SensorLecturaDTO;
+import com.sicca.dto.requests.iot.SensorRequest;
 import com.sicca.model.sensor.SensorEntity;
 import com.sicca.model.sensor.SensorLecturaEntity;
 import com.sicca.repository.SensorLecturaRepository;

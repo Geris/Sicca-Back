@@ -14,6 +14,7 @@ import com.sicca.model.cultivo.EspecieEntity;
 import com.sicca.model.imagen.ImagenEntity;
 import com.sicca.model.imagen.ResultadoIAEntity;
 import com.sicca.model.invernadero.InvernaderoEntity;
+import com.sicca.model.iot.MicrocontroladorEntity;
 import com.sicca.repository.*;
 import com.sicca.service.ia.PythonAnalisysResponse;
 import com.sicca.service.ia.PythonAnalyzerService;
@@ -44,6 +45,7 @@ public class CultivoService {
     private final InvernaderoRepository invernaderoRepository;
     private final EspecieRepository especieRepository;
     private final ImagenRepository imagenRepository;
+    private final MicrocontroladorRepository microcontroladorRepository;
     private final ModelMapper mapper;
     private final GcsStorageService storageService;
     private final PythonAnalyzerService analyzerService;
@@ -77,7 +79,7 @@ public class CultivoService {
     public CultivoResponse obtenerPorId(Integer id) {
         Optional<CultivoEntity> entity = repository.findById(id);
         if(entity.isPresent()){
-            return mapper.map(entity, CultivoResponse.class);
+            return mapCultivo(entity.get());
         }
         return new CultivoResponse();
     }
@@ -86,16 +88,7 @@ public class CultivoService {
         List<CultivoResponse> responseList = new ArrayList<>();
         List<CultivoEntity> entityList = repository.findByInvernaderoId(invernaderoId);
         entityList.forEach(entity -> {
-                    CultivoResponse cultivo = new CultivoResponse();
-                    cultivo.setNombre(entity.getNombre());
-                    cultivo.setDescripcion(entity.getDescripcion());
-                    cultivo.setFechaInicio(entity.getFechaInicio());
-                    cultivo.setFechaFin(entity.getFechaFin());
-                    cultivo.setTipo(entity.getTipo());
-                    cultivo.setInvernaderoId(entity.getInvernadero().getId());
-                    cultivo.setEspecieId(entity.getEspecie().getId());
-                    cultivo.setMicrocontroladorId(entity.getMicrocontrolador().getId());
-                    responseList.add(cultivo);
+                    responseList.add(mapCultivo(entity));
                 });
         return responseList;
     }
@@ -143,9 +136,15 @@ public class CultivoService {
 
     }
 
-    public void enlazarMicrocontrolador(Integer cultivoId, MicrocontroladorRequest microcontrolador) {
-        //TODO: implementar
+    public void enlazarMicrocontrolador(Integer cultivoId, Integer microcontroladorId) {
+        Optional<CultivoEntity> entity = repository.findById(cultivoId);
+        Optional<MicrocontroladorEntity> microcontroladorEntity = microcontroladorRepository.findById(Long.valueOf(microcontroladorId));
 
+        if(entity.isPresent() && microcontroladorEntity.isPresent()){
+            CultivoEntity cultivo = entity.get();
+            cultivo.setMicrocontrolador(microcontroladorEntity.get());
+            repository.save(cultivo);
+        }
     }
 
     public EspecieResponse crearEspecieCultivo(EspecieRequest especie) {
@@ -154,6 +153,20 @@ public class CultivoService {
                 .nombreCientifico(especie.getNombreCientifico())
                 .build();
         return mapper.map(especieRepository.save(entity), EspecieResponse.class);
+    }
+
+    private CultivoResponse mapCultivo(CultivoEntity entity){
+        return CultivoResponse.builder()
+                .id(entity.getId())
+                .nombre(entity.getNombre())
+                .descripcion(entity.getDescripcion())
+                .fechaInicio(entity.getFechaInicio())
+                .fechaFin(entity.getFechaFin())
+                .tipo(entity.getTipo())
+                .invernaderoId(entity.getInvernadero().getId())
+                .especieId(entity.getEspecie().getId())
+                .microcontroladorId(entity.getMicrocontrolador().getId())
+                .build();
     }
 }
 
