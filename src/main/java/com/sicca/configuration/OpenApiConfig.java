@@ -23,7 +23,7 @@ public class OpenApiConfig {
                 url = "https://qa.sicca.com";
                 break;
             default:
-                url = "http://localhost:8080";
+                url = "/";
         }
 
         Server server = new Server()
