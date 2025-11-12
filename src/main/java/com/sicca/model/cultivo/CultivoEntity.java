@@ -51,7 +51,7 @@ public class CultivoEntity {
     @JoinColumn(name = "id_invernadero", nullable = false)
     private InvernaderoEntity invernadero;
 
-    @OneToMany(mappedBy = "microcontrolador", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SensorEntity> sensores;
 
     @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
