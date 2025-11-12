@@ -16,4 +16,5 @@ public class SensorResponse {
     private String codigoSerial;
     private Integer unidadMedida;
     private Integer microcontroladorId;
+    private Integer cultivoId;
 }

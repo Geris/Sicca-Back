@@ -12,4 +12,6 @@ public interface SensorRepository extends JpaRepository<SensorEntity, Integer> {
     Optional<SensorEntity> findByCodigoSerial(String serial);
 
     List<SensorEntity> findByMicrocontroladorId(Integer microcontroladorId);
+
+    List<SensorEntity> findByCultivoId(Integer cultivoId);
 }

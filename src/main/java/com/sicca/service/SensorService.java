@@ -68,7 +68,7 @@ public class SensorService {
         sensorLecturaRepository.save(lectura);
     }
 
-    public SensorResponse crearSensor(Integer microcontroladorId, SensorRequest sensor) {
+    public SensorResponse crearSensorMicro(Integer microcontroladorId, SensorRequest sensor) {
         TipoSensorEntity tipoSensor = tipoSensorRepository.findByNombre(TipoSensor.SENSOR.getValor());
         Optional<MicrocontroladorEntity> microcontrolador = microcontroladorRepository.findById(Long.valueOf(microcontroladorId));
         if(microcontrolador.isEmpty()){
@@ -80,6 +80,25 @@ public class SensorService {
                 .descripcion(sensor.getDescripcion())
                 .tipo(tipoSensor)
                 .microcontrolador(microcontrolador.get())
+                .unidadMedida(1)
+                .build();
+        SensorEntity savedSensor = sensorRepository.save(sensorEntity);
+
+        return mapSensor(savedSensor);
+    }
+
+    public SensorResponse crearSensorCultivo(Integer sensorId, SensorRequest sensor) {
+        TipoSensorEntity tipoSensor = tipoSensorRepository.findByNombre(TipoSensor.SENSOR.getValor());
+        Optional<CultivoEntity> cultivo = cultivoRepository.findById(sensorId);
+        if(cultivo.isEmpty()){
+            throw new NoSuchElementException("No se encontro el microcontrolador");
+        }
+
+        SensorEntity sensorEntity = SensorEntity.builder()
+                .codigoSerial(sensor.getCodigoSerial())
+                .descripcion(sensor.getDescripcion())
+                .tipo(tipoSensor)
+                .cultivo(cultivo.get())
                 .unidadMedida(1)
                 .build();
         SensorEntity savedSensor = sensorRepository.save(sensorEntity);
@@ -116,6 +135,12 @@ public class SensorService {
                 .map(this::mapSensor).toList();
     }
 
+    public List<SensorResponse> obtenerSensoresPorCultivoId(Integer cultivoId) {
+        List<SensorEntity> sensores = sensorRepository.findByCultivoId(cultivoId);
+        return sensores.stream()
+                .map(this::mapSensor).toList();
+    }
+
     public List<SensorLecturaResponse> obtenerLecturas(Integer sensorId) {
         List<SensorLecturaEntity> entities = sensorLecturaRepository.findBySensorId(sensorId);
         return entities.stream().map(this::mapLectura).toList();
@@ -134,7 +159,8 @@ public class SensorService {
         return SensorResponse.builder()
                 .id(entity.getId())
                 .codigoSerial(entity.getCodigoSerial())
-                .microcontroladorId(entity.getMicrocontrolador().getId())
+                .microcontroladorId(entity.getMicrocontrolador() != null ? entity.getMicrocontrolador().getId() : null)
+                .cultivoId(entity.getCultivo() != null ? entity.getCultivo().getId() : null)
                 .unidadMedida(1)
                 .descripcion(entity.getDescripcion())
                 .build();

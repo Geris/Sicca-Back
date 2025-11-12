@@ -1,6 +1,8 @@
 
 package com.sicca.model.iot;
 
+import com.sicca.model.cultivo.CultivoEntity;
+import com.sicca.model.invernadero.InvernaderoEntity;
 import com.sicca.model.sensor.SensorEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,12 @@ public class MicrocontroladorEntity {
     private String codigoSerial;
 
     private String descripcion;
+
+    @OneToOne(mappedBy = "microcontrolador")
+    private InvernaderoEntity invernadero;
+
+    @OneToMany(mappedBy = "microcontrolador", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CultivoEntity> cultivos;
 
     @OneToMany(mappedBy = "microcontrolador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SensorEntity> sensores;

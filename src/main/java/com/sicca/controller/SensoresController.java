@@ -35,11 +35,11 @@ public class SensoresController {
     }
 
     @PostMapping(value = "/crearMicro")
-    @Operation(summary = "Crea un microcontrolador para un cultivo")
-    public ResponseEntity<MicrocontroladorResponse> crearMicrocontrolador(@RequestParam("cultivoId") Integer cultivoId,
+    @Operation(summary = "Crea un microcontrolador para un invernadero")
+    public ResponseEntity<MicrocontroladorResponse> crearMicrocontrolador(@RequestParam("invernaderoId") Integer invernaderoId,
                                                                 @RequestBody MicrocontroladorRequest microcontrolador) {
 
-        return ResponseEntity.ok(sensorService.crearMicrocontrolador(cultivoId, microcontrolador));
+        return ResponseEntity.ok(sensorService.crearMicrocontrolador(invernaderoId, microcontrolador));
     }
 
     @GetMapping(value = "/obtenerMicros")
@@ -49,11 +49,18 @@ public class SensoresController {
         return ResponseEntity.ok(sensorService.obtenerMicrocontroladores());
     }
 
-    @GetMapping(value = "/obtenerSensores")
+    @GetMapping(value = "/obtenerSensoresPorMicro")
     @Operation(summary = "Obtiene una lista de los sensores para un microcontrolador")
-    public ResponseEntity<List<SensorResponse>> obtenerSensores(@RequestParam("microcontroladorId") Integer microcontroladorId) {
+    public ResponseEntity<List<SensorResponse>> obtenerSensoresPorMicro(@RequestParam("microcontroladorId") Integer microcontroladorId) {
 
         return ResponseEntity.ok(sensorService.obtenerSensoresPorMicrocontroladorId(microcontroladorId));
+    }
+
+    @GetMapping(value = "/obtenerSensoresPorCultivo")
+    @Operation(summary = "Obtiene una lista de los sensores para un cultivo")
+    public ResponseEntity<List<SensorResponse>> obtenerSensoresPorCultivo(@RequestParam("cultivoId") Integer cultivoId) {
+
+        return ResponseEntity.ok(sensorService.obtenerSensoresPorCultivoId(cultivoId));
     }
 
     @GetMapping(value = "/obtenerLecturas")
@@ -63,11 +70,19 @@ public class SensoresController {
         return ResponseEntity.ok(sensorService.obtenerLecturas(sensorId));
     }
 
-    @PostMapping(value = "/crear")
+    @PostMapping(value = "/crearSensorMicro")
     @Operation(summary = "Crea un sensor para un microcontrolador")
-    public ResponseEntity<SensorResponse> crearSensor(@RequestParam("microcontroladorId") Integer microcontroladorId,
+    public ResponseEntity<SensorResponse> crearSensorMicro(@RequestParam("microcontroladorId") Integer microcontroladorId,
                                                       @RequestBody SensorRequest sensor) {
 
-        return ResponseEntity.ok(sensorService.crearSensor(microcontroladorId, sensor));
+        return ResponseEntity.ok(sensorService.crearSensorMicro(microcontroladorId, sensor));
+    }
+
+    @PostMapping(value = "/crearSensorCultivo")
+    @Operation(summary = "Crea un sensor para un cultivo")
+    public ResponseEntity<SensorResponse> crearSensorCultivo(@RequestParam("cultivoId") Integer cultivoId,
+                                                      @RequestBody SensorRequest sensor) {
+
+        return ResponseEntity.ok(sensorService.crearSensorCultivo(cultivoId, sensor));
     }
 }
