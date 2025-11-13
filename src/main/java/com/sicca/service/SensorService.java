@@ -4,6 +4,7 @@ import com.sicca.dto.requests.iot.MedicionPayloadDTO;
 import com.sicca.dto.requests.iot.MicrocontroladorRequest;
 import com.sicca.dto.requests.iot.SensorLecturaDTO;
 import com.sicca.dto.requests.iot.SensorRequest;
+import com.sicca.dto.responses.invernadero.InvernaderoResponse;
 import com.sicca.dto.responses.iot.MicrocontroladorResponse;
 import com.sicca.dto.responses.iot.SensorLecturaResponse;
 import com.sicca.dto.responses.iot.SensorResponse;
@@ -109,25 +110,19 @@ public class SensorService {
     }
 
     public MicrocontroladorResponse crearMicrocontrolador(Integer invernaderoId, MicrocontroladorRequest microcontrolador) {
-        Optional<InvernaderoEntity> invernaderoOpt = invernaderoRepository.findById(invernaderoId);
-        if(invernaderoOpt.isEmpty()){
-            throw new NoSuchElementException("No se encontro el invernadero");
-        }
 
         MicrocontroladorEntity entity = MicrocontroladorEntity.builder()
                 .codigoSerial(microcontrolador.getCodigoSerial())
                 .descripcion(microcontrolador.getDescripcion())
                 .nombre(microcontrolador.getDescripcion())
-                .invernadero(invernaderoOpt.get())
                 .build();
-        MicrocontroladorEntity savedEntity = microcontroladorRepository.save(entity);
+        MicrocontroladorEntity savedMicro = microcontroladorRepository.save(entity);
+        InvernaderoEntity invernadero = invernaderoRepository.findById(invernaderoId)
+                .orElseThrow(() -> new RuntimeException("Invernadero no encontrado"));
+        invernadero.setMicrocontrolador(savedMicro);
+        invernaderoRepository.save(invernadero);
 
-        List<CultivoEntity> cultivoEntities = cultivoRepository.findByInvernaderoId(invernaderoId);
-        cultivoEntities.forEach(cultivoEntity -> {
-            cultivoEntity.setMicrocontrolador(savedEntity);
-            cultivoRepository.save(cultivoEntity);
-        });
-        return mapMicrocontrolador(savedEntity);
+        return mapMicrocontrolador(savedMicro);
     }
 
     public List<MicrocontroladorResponse> obtenerMicrocontroladores() {
@@ -161,6 +156,7 @@ public class SensorService {
                 .nombre(entity.getNombre())
                 .build();
     }
+
 
     private SensorResponse mapSensor(SensorEntity entity){
         return SensorResponse.builder()
