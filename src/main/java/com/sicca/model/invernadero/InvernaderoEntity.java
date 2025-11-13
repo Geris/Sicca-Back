@@ -49,7 +49,7 @@ public class InvernaderoEntity {
     private PerfilEntity perfil;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "microcontrolador_id")
+    @JoinColumn(name = "id_microcontrolador")
     private MicrocontroladorEntity microcontrolador;
 
     @OneToMany(mappedBy = "invernadero", cascade = CascadeType.ALL, orphanRemoval = true)

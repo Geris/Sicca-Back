@@ -1,5 +1,6 @@
 package com.sicca.dto.responses.iot;
 
+import com.sicca.dto.responses.invernadero.InvernaderoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,5 @@ public class MicrocontroladorResponse {
     private String descripcion;
     private String codigoSerial;
     private List<SensorResponse> sensorList;
+    private InvernaderoResponse invernaderoResponse;
 }
