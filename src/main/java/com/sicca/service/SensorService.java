@@ -9,6 +9,7 @@ import com.sicca.dto.responses.iot.SensorLecturaResponse;
 import com.sicca.dto.responses.iot.SensorResponse;
 import com.sicca.enums.TipoSensor;
 import com.sicca.model.cultivo.CultivoEntity;
+import com.sicca.model.invernadero.InvernaderoEntity;
 import com.sicca.model.iot.MicrocontroladorEntity;
 import com.sicca.model.sensor.SensorEntity;
 import com.sicca.model.sensor.SensorLecturaEntity;
@@ -33,6 +34,7 @@ public class SensorService {
     private final TipoSensorRepository tipoSensorRepository;
     private final MicrocontroladorRepository microcontroladorRepository;
     private final CultivoRepository cultivoRepository;
+    private final InvernaderoRepository invernaderoRepository;
 
     public String crearLectura(MedicionPayloadDTO payload) {
 
@@ -106,20 +108,25 @@ public class SensorService {
         return mapSensor(savedSensor);
     }
 
-    public MicrocontroladorResponse crearMicrocontrolador(Integer cultivoId, MicrocontroladorRequest microcontrolador) {
+    public MicrocontroladorResponse crearMicrocontrolador(Integer invernaderoId, MicrocontroladorRequest microcontrolador) {
+        Optional<InvernaderoEntity> invernaderoOpt = invernaderoRepository.findById(invernaderoId);
+        if(invernaderoOpt.isEmpty()){
+            throw new NoSuchElementException("No se encontro el invernadero");
+        }
+
         MicrocontroladorEntity entity = MicrocontroladorEntity.builder()
                 .codigoSerial(microcontrolador.getCodigoSerial())
                 .descripcion(microcontrolador.getDescripcion())
                 .nombre(microcontrolador.getDescripcion())
+                .invernadero(invernaderoOpt.get())
                 .build();
         MicrocontroladorEntity savedEntity = microcontroladorRepository.save(entity);
 
-        Optional<CultivoEntity> cultivoEntity = cultivoRepository.findById(cultivoId);
-        if(cultivoEntity.isPresent()){
-            CultivoEntity cultivo = cultivoEntity.get();
-            cultivo.setMicrocontrolador(savedEntity);
-            cultivoRepository.save(cultivo);
-        }
+        List<CultivoEntity> cultivoEntities = cultivoRepository.findByInvernaderoId(invernaderoId);
+        cultivoEntities.forEach(cultivoEntity -> {
+            cultivoEntity.setMicrocontrolador(savedEntity);
+            cultivoRepository.save(cultivoEntity);
+        });
         return mapMicrocontrolador(savedEntity);
     }
 
