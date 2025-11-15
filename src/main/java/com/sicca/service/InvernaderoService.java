@@ -3,9 +3,11 @@ package com.sicca.service;
 import com.sicca.dto.requests.invernadero.InvernaderoRequest;
 import com.sicca.dto.responses.invernadero.EstadoInvernaderoResponse;
 import com.sicca.dto.responses.invernadero.InvernaderoResponse;
+import com.sicca.dto.responses.iot.MicrocontroladorResponse;
 import com.sicca.enums.EstadoInvernadero;
 import com.sicca.model.invernadero.EstadoInvernaderoEntity;
 import com.sicca.model.invernadero.InvernaderoEntity;
+import com.sicca.model.iot.MicrocontroladorEntity;
 import com.sicca.model.perfil.PerfilEntity;
 import com.sicca.repository.EstadoInvernaderoRepository;
 import com.sicca.repository.InvernaderoRepository;
@@ -66,6 +68,7 @@ public class InvernaderoService {
     }
 
     private InvernaderoResponse mapInvernadero(InvernaderoEntity entity){
+        MicrocontroladorEntity microEntity = entity.getMicrocontrolador() != null ? entity.getMicrocontrolador() : new MicrocontroladorEntity();
         return InvernaderoResponse.builder()
                 .id(entity.getId())
                 .nombre(entity.getNombre())
@@ -74,6 +77,7 @@ public class InvernaderoService {
                 .estadoId(entity.getEstado().getId())
                 .fechaActualizacion(entity.getFechaActualizacion())
                 .fechaCreacion(entity.getFechaCreacion())
+                .microcontrolador(mapper.map(microEntity, MicrocontroladorResponse.class))
                 .build();
     }
 }

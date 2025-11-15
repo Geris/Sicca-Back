@@ -1,5 +1,6 @@
 package com.sicca.dto.responses.invernadero;
 
+import com.sicca.dto.responses.iot.MicrocontroladorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class InvernaderoResponse {
     private LocalDateTime fechaCreacion;
     private Integer estadoId;
     private Integer perfilId;
+    private MicrocontroladorResponse microcontrolador;
 }

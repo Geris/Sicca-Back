@@ -4,11 +4,13 @@ import com.sicca.dto.requests.iot.MedicionPayloadDTO;
 import com.sicca.dto.requests.iot.MicrocontroladorRequest;
 import com.sicca.dto.requests.iot.SensorLecturaDTO;
 import com.sicca.dto.requests.iot.SensorRequest;
+import com.sicca.dto.responses.invernadero.InvernaderoResponse;
 import com.sicca.dto.responses.iot.MicrocontroladorResponse;
 import com.sicca.dto.responses.iot.SensorLecturaResponse;
 import com.sicca.dto.responses.iot.SensorResponse;
 import com.sicca.enums.TipoSensor;
 import com.sicca.model.cultivo.CultivoEntity;
+import com.sicca.model.invernadero.InvernaderoEntity;
 import com.sicca.model.iot.MicrocontroladorEntity;
 import com.sicca.model.sensor.SensorEntity;
 import com.sicca.model.sensor.SensorLecturaEntity;
@@ -33,6 +35,7 @@ public class SensorService {
     private final TipoSensorRepository tipoSensorRepository;
     private final MicrocontroladorRepository microcontroladorRepository;
     private final CultivoRepository cultivoRepository;
+    private final InvernaderoRepository invernaderoRepository;
 
     public String crearLectura(MedicionPayloadDTO payload) {
 
@@ -68,7 +71,7 @@ public class SensorService {
         sensorLecturaRepository.save(lectura);
     }
 
-    public SensorResponse crearSensor(Integer microcontroladorId, SensorRequest sensor) {
+    public SensorResponse crearSensorMicro(Integer microcontroladorId, SensorRequest sensor) {
         TipoSensorEntity tipoSensor = tipoSensorRepository.findByNombre(TipoSensor.SENSOR.getValor());
         Optional<MicrocontroladorEntity> microcontrolador = microcontroladorRepository.findById(Long.valueOf(microcontroladorId));
         if(microcontrolador.isEmpty()){
@@ -87,21 +90,39 @@ public class SensorService {
         return mapSensor(savedSensor);
     }
 
-    public MicrocontroladorResponse crearMicrocontrolador(Integer cultivoId, MicrocontroladorRequest microcontrolador) {
+    public SensorResponse crearSensorCultivo(Integer sensorId, SensorRequest sensor) {
+        TipoSensorEntity tipoSensor = tipoSensorRepository.findByNombre(TipoSensor.SENSOR.getValor());
+        Optional<CultivoEntity> cultivo = cultivoRepository.findById(sensorId);
+        if(cultivo.isEmpty()){
+            throw new NoSuchElementException("No se encontro el microcontrolador");
+        }
+
+        SensorEntity sensorEntity = SensorEntity.builder()
+                .codigoSerial(sensor.getCodigoSerial())
+                .descripcion(sensor.getDescripcion())
+                .tipo(tipoSensor)
+                .cultivo(cultivo.get())
+                .unidadMedida(1)
+                .build();
+        SensorEntity savedSensor = sensorRepository.save(sensorEntity);
+
+        return mapSensor(savedSensor);
+    }
+
+    public MicrocontroladorResponse crearMicrocontrolador(Integer invernaderoId, MicrocontroladorRequest microcontrolador) {
+
         MicrocontroladorEntity entity = MicrocontroladorEntity.builder()
                 .codigoSerial(microcontrolador.getCodigoSerial())
                 .descripcion(microcontrolador.getDescripcion())
                 .nombre(microcontrolador.getDescripcion())
                 .build();
-        MicrocontroladorEntity savedEntity = microcontroladorRepository.save(entity);
+        MicrocontroladorEntity savedMicro = microcontroladorRepository.save(entity);
+        InvernaderoEntity invernadero = invernaderoRepository.findById(invernaderoId)
+                .orElseThrow(() -> new RuntimeException("Invernadero no encontrado"));
+        invernadero.setMicrocontrolador(savedMicro);
+        invernaderoRepository.save(invernadero);
 
-        Optional<CultivoEntity> cultivoEntity = cultivoRepository.findById(cultivoId);
-        if(cultivoEntity.isPresent()){
-            CultivoEntity cultivo = cultivoEntity.get();
-            cultivo.setMicrocontrolador(savedEntity);
-            cultivoRepository.save(cultivo);
-        }
-        return mapMicrocontrolador(savedEntity);
+        return mapMicrocontrolador(savedMicro);
     }
 
     public List<MicrocontroladorResponse> obtenerMicrocontroladores() {
@@ -112,6 +133,12 @@ public class SensorService {
 
     public List<SensorResponse> obtenerSensoresPorMicrocontroladorId(Integer microcontroladorId) {
         List<SensorEntity> sensores = sensorRepository.findByMicrocontroladorId(microcontroladorId);
+        return sensores.stream()
+                .map(this::mapSensor).toList();
+    }
+
+    public List<SensorResponse> obtenerSensoresPorCultivoId(Integer cultivoId) {
+        List<SensorEntity> sensores = sensorRepository.findByCultivoId(cultivoId);
         return sensores.stream()
                 .map(this::mapSensor).toList();
     }
@@ -130,11 +157,13 @@ public class SensorService {
                 .build();
     }
 
+
     private SensorResponse mapSensor(SensorEntity entity){
         return SensorResponse.builder()
                 .id(entity.getId())
                 .codigoSerial(entity.getCodigoSerial())
-                .microcontroladorId(entity.getMicrocontrolador().getId())
+                .microcontroladorId(entity.getMicrocontrolador() != null ? entity.getMicrocontrolador().getId() : null)
+                .cultivoId(entity.getCultivo() != null ? entity.getCultivo().getId() : null)
                 .unidadMedida(1)
                 .descripcion(entity.getDescripcion())
                 .build();

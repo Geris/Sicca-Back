@@ -1,5 +1,6 @@
 package com.sicca.model.sensor;
 
+import com.sicca.model.cultivo.CultivoEntity;
 import com.sicca.model.iot.MicrocontroladorEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,10 @@ public class SensorEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_microcontrolador")
     private MicrocontroladorEntity microcontrolador;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cultivo")
+    private CultivoEntity cultivo;
 
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SensorLecturaEntity> lecturas;
