@@ -1,79 +1,113 @@
 package com.sicca.controller;
 
+import com.sicca.model.iot.EstadoControlEquipoEntity;
+import com.sicca.service.ControlService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/api/control")
+@RequiredArgsConstructor
 public class ControlController {
 
-    static class EstadoControl {
-        public int[] pumps = new int[]{0,0,0,0};
-        public int luz = 0;
-        public int vent = 0;
-    }
+    private final ControlService controlService;
 
-    private final Map<String, EstadoControl> estadoPorEquipo = new ConcurrentHashMap<>();
-
-    private EstadoControl ensure(String equipo) {
-        return estadoPorEquipo.computeIfAbsent(equipo, k -> new EstadoControl());
-    }
-
-    // GET leído por el ESP-01 cada ~2s
+    // =========================
+    //  GET leído por el ESP-01 cada ~2s
+    //  GET /api/control?equipo=ESP8266-XXXXXX
+    // =========================
     @GetMapping
     public ResponseEntity<?> getEstado(@RequestParam String equipo) {
-        EstadoControl e = ensure(equipo);
+        EstadoControlEquipoEntity e = controlService.obtenerEstado(equipo);
+
+        int[] pumps = new int[]{
+                e.isPump1() ? 1 : 0,
+                e.isPump2() ? 1 : 0,
+                e.isPump3() ? 1 : 0,
+                e.isPump4() ? 1 : 0
+        };
+        int luz  = e.isLuz()  ? 1 : 0;
+        int vent = e.isVent() ? 1 : 0;
+
         System.out.println("[GET /api/control] equipo=" + equipo +
-                " -> pumps=["+e.pumps[0]+","+e.pumps[1]+","+e.pumps[2]+","+e.pumps[3]+"]" +
-                " env(luz="+e.luz+", vent="+e.vent+")");
+                " -> pumps=["+pumps[0]+","+pumps[1]+","+pumps[2]+","+pumps[3]+"]" +
+                " env(luz="+luz+", vent="+vent+")");
+
         return ResponseEntity.ok(Map.of(
-                "pumps", e.pumps,
-                "env", Map.of("luz", e.luz, "vent", e.vent)
+                "pumps", pumps,
+                "env", Map.of("luz", luz, "vent", vent)
         ));
     }
 
-    // POST para setear bombas desde Postman
+    // =========================
+    //  POST /api/control/pumps
+    //  body: { "pumps":[x,y,z,w] }
+    // =========================
     @PostMapping("/pumps")
     public ResponseEntity<?> setPumps(@RequestParam String equipo, @RequestBody Map<String, Object> body) {
-        var e = ensure(equipo);
+
         Object arr = body.get("pumps");
         if (!(arr instanceof java.util.List<?> list) || list.size() != 4) {
             System.out.println("[POST /pumps] equipo=" + equipo + " -> ERROR body=" + body);
-            return ResponseEntity.badRequest().body("Debe enviar {\"pumps\":[x,y,z,w]} con 4 valores 0/1");
+            return ResponseEntity.badRequest()
+                    .body("Debe enviar {\"pumps\":[x,y,z,w]} con 4 valores 0/1");
         }
 
+        int[] pumps = new int[4];
         for (int i = 0; i < 4; i++) {
             Object v = list.get(i);
-            int val = (v instanceof Number n) ? n.intValue() : Integer.parseInt(v.toString());
-            e.pumps[i] = (val != 0) ? 1 : 0;
+            int val = (v instanceof Number n) ? n.intValue()
+                    : Integer.parseInt(v.toString());
+            pumps[i] = (val != 0) ? 1 : 0;
         }
+
+        EstadoControlEquipoEntity e = controlService.actualizarPumps(equipo, pumps);
+
         System.out.println("[POST /pumps] equipo=" + equipo +
-                " -> OK pumps=["+e.pumps[0]+","+e.pumps[1]+","+e.pumps[2]+","+e.pumps[3]+"]");
-        return ResponseEntity.ok(Map.of("pumps", e.pumps));
+                " -> OK pumps=["+pumps[0]+","+pumps[1]+","+pumps[2]+","+pumps[3]+"]");
+
+        int[] resp = new int[]{
+                e.isPump1() ? 1 : 0,
+                e.isPump2() ? 1 : 0,
+                e.isPump3() ? 1 : 0,
+                e.isPump4() ? 1 : 0
+        };
+        return ResponseEntity.ok(Map.of("pumps", resp));
     }
 
-    // POST para setear luz/ventilación desde Postman
+    // =========================
+    //  POST /api/control/env
+    //  body: { "luz":0|1|true|false, "vent":0|1|true|false }
+    // =========================
     @PostMapping("/env")
     public ResponseEntity<?> setEnv(@RequestParam String equipo, @RequestBody Map<String, Object> body) {
-        var e = ensure(equipo);
 
-        Object luzObj = body.get("luz");
+        Object luzObj  = body.get("luz");
         Object ventObj = body.get("vent");
         if (luzObj == null || ventObj == null) {
             System.out.println("[POST /env] equipo=" + equipo + " -> ERROR body=" + body);
-            return ResponseEntity.badRequest().body("Debe enviar {\"luz\":0|1, \"vent\":0|1}");
+            return ResponseEntity.badRequest()
+                    .body("Debe enviar {\"luz\":0|1, \"vent\":0|1}");
         }
 
-        int luz  = (luzObj  instanceof Boolean bLuz)  ? (bLuz  ? 1 : 0) : Integer.parseInt(luzObj.toString());
-        int vent = (ventObj instanceof Boolean bVent) ? (bVent ? 1 : 0) : Integer.parseInt(ventObj.toString());
+        int luz  = (luzObj  instanceof Boolean bLuz)  ? (bLuz  ? 1 : 0)
+                : Integer.parseInt(luzObj.toString());
+        int vent = (ventObj instanceof Boolean bVent) ? (bVent ? 1 : 0)
+                : Integer.parseInt(ventObj.toString());
 
-        e.luz = luz;
-        e.vent = vent;
+        EstadoControlEquipoEntity e = controlService.actualizarEnv(equipo, luz, vent);
+
+        int luzResp  = e.isLuz()  ? 1 : 0;
+        int ventResp = e.isVent() ? 1 : 0;
 
         System.out.println("[POST /env] equipo=" + equipo +
-                " -> OK env(luz="+e.luz+", vent="+e.vent+")");
-        return ResponseEntity.ok(Map.of("env", Map.of("luz", e.luz, "vent", e.vent)));
+                " -> OK env(luz="+luzResp+", vent="+ventResp+")");
+
+        return ResponseEntity.ok(
+                Map.of("env", Map.of("luz", luzResp, "vent", ventResp))
+        );
     }
 }
