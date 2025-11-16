@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SensorRequest {
+    private String codigoSerial;
     private String descripcion;
     private Integer tipoId;
-    private Integer unidadMedida;
-    private Integer microcontroladorId;
-    private Integer lecturasId;
 }

@@ -1,6 +1,7 @@
 package com.sicca.model.invernadero;
 
 import com.sicca.model.cultivo.CultivoEntity;
+import com.sicca.model.iot.MicrocontroladorEntity;
 import com.sicca.model.perfil.PerfilEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,11 +34,11 @@ public class InvernaderoEntity {
 
     @CreatedDate
     @Column(name = "fecha_registro")
-    private LocalDateTime fechaRegistro;
+    private LocalDateTime fechaCreacion;
 
     @LastModifiedDate
     @Column(name = "ultima_modificacion")
-    private LocalDateTime ultimaModificacion;
+    private LocalDateTime fechaActualizacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estado", nullable = false)
@@ -46,6 +47,10 @@ public class InvernaderoEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_perfil", nullable = false)
     private PerfilEntity perfil;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_microcontrolador")
+    private MicrocontroladorEntity microcontrolador;
 
     @OneToMany(mappedBy = "invernadero", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CultivoEntity> cultivos;

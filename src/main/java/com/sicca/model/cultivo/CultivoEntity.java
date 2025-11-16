@@ -3,6 +3,7 @@ package com.sicca.model.cultivo;
 import com.sicca.model.imagen.ImagenEntity;
 import com.sicca.model.invernadero.InvernaderoEntity;
 import com.sicca.model.iot.MicrocontroladorEntity;
+import com.sicca.model.sensor.SensorEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,6 +52,9 @@ public class CultivoEntity {
     private InvernaderoEntity invernadero;
 
     @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SensorEntity> sensores;
+
+    @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ParametroCultivoEntity> parametroCultivo;
 
     @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,7 +63,8 @@ public class CultivoEntity {
     @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImagenEntity> imagenes;
 
-    @OneToOne
-    @JoinColumn(name = "microcontrolador_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "microcontrolador_id", nullable = false)
     private MicrocontroladorEntity microcontrolador;
+
 }

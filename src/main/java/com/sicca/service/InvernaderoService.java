@@ -3,9 +3,11 @@ package com.sicca.service;
 import com.sicca.dto.requests.invernadero.InvernaderoRequest;
 import com.sicca.dto.responses.invernadero.EstadoInvernaderoResponse;
 import com.sicca.dto.responses.invernadero.InvernaderoResponse;
+import com.sicca.dto.responses.iot.MicrocontroladorResponse;
 import com.sicca.enums.EstadoInvernadero;
 import com.sicca.model.invernadero.EstadoInvernaderoEntity;
 import com.sicca.model.invernadero.InvernaderoEntity;
+import com.sicca.model.iot.MicrocontroladorEntity;
 import com.sicca.model.perfil.PerfilEntity;
 import com.sicca.repository.EstadoInvernaderoRepository;
 import com.sicca.repository.InvernaderoRepository;
@@ -29,7 +31,7 @@ public class InvernaderoService {
 
     public InvernaderoResponse obtenerPorId(Integer id) {
         return repository.findById(id)
-                .map(e -> mapper.map(e, InvernaderoResponse.class))
+                .map(this::mapInvernadero)
                 .orElse(null);
     }
 
@@ -43,14 +45,14 @@ public class InvernaderoService {
         perfilEntity.ifPresent(entity::setPerfil);
 
         InvernaderoEntity savedEntity = repository.save(entity);
-        return mapper.map(savedEntity, InvernaderoResponse.class);
+        return mapInvernadero(savedEntity);
     }
 
 
     public List<InvernaderoResponse> obtenerPorPerfilId(Integer perfilId) {
         List<InvernaderoEntity> invernaderoEntities = repository.findByPerfilId(perfilId);
         return invernaderoEntities.stream()
-                .map(entity -> mapper.map(entity, InvernaderoResponse.class))
+                .map(this::mapInvernadero)
                 .collect(Collectors.toList());
     }
 
@@ -63,6 +65,20 @@ public class InvernaderoService {
 
     public void eliminar(Integer id) {
         repository.deleteById(id);
+    }
+
+    private InvernaderoResponse mapInvernadero(InvernaderoEntity entity){
+        MicrocontroladorEntity microEntity = entity.getMicrocontrolador() != null ? entity.getMicrocontrolador() : new MicrocontroladorEntity();
+        return InvernaderoResponse.builder()
+                .id(entity.getId())
+                .nombre(entity.getNombre())
+                .ubicacion(entity.getUbicacion())
+                .perfilId(entity.getPerfil().getId())
+                .estadoId(entity.getEstado().getId())
+                .fechaActualizacion(entity.getFechaActualizacion())
+                .fechaCreacion(entity.getFechaCreacion())
+                .microcontrolador(mapper.map(microEntity, MicrocontroladorResponse.class))
+                .build();
     }
 }
 

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class SensorResponse {
     private Integer id;
     private String descripcion;
-    private Integer tipoId;
+    private String codigoSerial;
     private Integer unidadMedida;
     private Integer microcontroladorId;
-    private Integer lecturasId;
+    private Integer cultivoId;
 }

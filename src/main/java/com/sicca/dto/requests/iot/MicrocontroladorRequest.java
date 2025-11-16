@@ -13,5 +13,4 @@ public class MicrocontroladorRequest {
     private String nombre;
     private String codigoSerial;
     private String descripcion;
-    private Integer sensoresId;
 }
