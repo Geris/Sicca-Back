@@ -70,6 +70,13 @@ public class SensoresController {
         return ResponseEntity.ok(sensorService.obtenerLecturas(sensorId));
     }
 
+    @GetMapping(value = "/obtenerUltimaLectura")
+    @Operation(summary = "Obtiene la ultima lectura para un sensor")
+    public ResponseEntity<SensorLecturaResponse> obtenerUltimLectura(@RequestParam("sensorId") Integer sensorId) {
+
+        return ResponseEntity.ok(sensorService.obtenerUltimaLectura(sensorId));
+    }
+
     @PostMapping(value = "/crearSensorMicro")
     @Operation(summary = "Crea un sensor para un microcontrolador")
     public ResponseEntity<SensorResponse> crearSensorMicro(@RequestParam("microcontroladorId") Integer microcontroladorId,

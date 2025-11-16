@@ -4,7 +4,6 @@ import com.sicca.dto.requests.iot.MedicionPayloadDTO;
 import com.sicca.dto.requests.iot.MicrocontroladorRequest;
 import com.sicca.dto.requests.iot.SensorLecturaDTO;
 import com.sicca.dto.requests.iot.SensorRequest;
-import com.sicca.dto.responses.invernadero.InvernaderoResponse;
 import com.sicca.dto.responses.iot.MicrocontroladorResponse;
 import com.sicca.dto.responses.iot.SensorLecturaResponse;
 import com.sicca.dto.responses.iot.SensorResponse;
@@ -177,5 +176,13 @@ public class SensorService {
                 .fechaMedicion(entity.getFechaMedicion())
                 .valor(entity.getValor())
                 .build();
+    }
+
+    public SensorLecturaResponse obtenerUltimaLectura(Integer sensorId) {
+        Optional<SensorLecturaEntity> response = sensorLecturaRepository.findTopBySensorIdOrderByFechaMedicionDesc(sensorId);
+        if(response.isPresent()){
+            return mapLectura(response.get());
+        }
+        return new SensorLecturaResponse();
     }
 }
