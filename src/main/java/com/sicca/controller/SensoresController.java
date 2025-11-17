@@ -92,4 +92,12 @@ public class SensoresController {
 
         return ResponseEntity.ok(sensorService.crearSensorCultivo(cultivoId, sensor));
     }
+
+    @PostMapping(value = "/activar")
+    @Operation(summary = "Activa un actuador")
+    public ResponseEntity<Void> crearSensorCultivo(@RequestParam("serial") String serial,
+                                                   @RequestParam("sensorId") Integer sensorId) {
+        sensorService.activarSensor(serial, sensorId);
+        return ResponseEntity.noContent().build();
+    }
 }

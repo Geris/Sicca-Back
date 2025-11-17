@@ -10,6 +10,7 @@ import com.sicca.dto.responses.iot.SensorResponse;
 import com.sicca.enums.TipoSensor;
 import com.sicca.model.cultivo.CultivoEntity;
 import com.sicca.model.invernadero.InvernaderoEntity;
+import com.sicca.model.iot.EstadoControlEquipoEntity;
 import com.sicca.model.iot.MicrocontroladorEntity;
 import com.sicca.model.sensor.SensorEntity;
 import com.sicca.model.sensor.SensorLecturaEntity;
@@ -35,6 +36,7 @@ public class SensorService {
     private final MicrocontroladorRepository microcontroladorRepository;
     private final CultivoRepository cultivoRepository;
     private final InvernaderoRepository invernaderoRepository;
+    private final EstadoControlEquipoRepository estadoControlEquipoRepository;
 
     public String crearLectura(MedicionPayloadDTO payload) {
 
@@ -184,5 +186,35 @@ public class SensorService {
             return mapLectura(response.get());
         }
         return new SensorLecturaResponse();
+    }
+
+    public void activarSensor(String serial, Integer sensorId) {
+        /*
+        -- pump2 cooler -> COOLER-01
+        -- pump3 luz -> luz-ambient...
+        -- pump4 bomba -> PUMP01
+        * */
+        Optional<SensorEntity> sensorEntity = sensorRepository.findById(sensorId);
+        Optional<EstadoControlEquipoEntity> controlEquipoEntity = estadoControlEquipoRepository.findByEquipoSerial(serial);
+
+        if(sensorEntity.isPresent() && controlEquipoEntity.isPresent()){
+            SensorEntity sensor = sensorEntity.get();
+            EstadoControlEquipoEntity estado = controlEquipoEntity.get();
+            if(sensor.getCodigoSerial().contains("COOLER-01")){
+                boolean status = estado.isPump2();
+                controlEquipoEntity.get().setPump2(!status);
+            }
+
+            if(sensor.getCodigoSerial().contains("luz-ambient")){
+                boolean status = estado.isPump3();
+                controlEquipoEntity.get().setPump3(!status);
+            }
+
+            if(sensor.getCodigoSerial().contains("PUMP01")){
+                boolean status = estado.isPump4();
+                controlEquipoEntity.get().setPump4(!status);
+            }
+        }
+
     }
 }
