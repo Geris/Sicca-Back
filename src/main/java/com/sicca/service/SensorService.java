@@ -202,18 +202,19 @@ public class SensorService {
             EstadoControlEquipoEntity estado = controlEquipoEntity.get();
             if(sensor.getCodigoSerial().contains("COOLER-01")){
                 boolean status = estado.isPump2();
-                controlEquipoEntity.get().setPump2(!status);
+                estado.setPump2(!status);
             }
 
             if(sensor.getCodigoSerial().contains("luz-ambient")){
                 boolean status = estado.isPump3();
-                controlEquipoEntity.get().setPump3(!status);
+                estado.setPump3(!status);
             }
 
             if(sensor.getCodigoSerial().contains("PUMP01")){
                 boolean status = estado.isPump4();
-                controlEquipoEntity.get().setPump4(!status);
+                estado.setPump4(!status);
             }
+            estadoControlEquipoRepository.save(estado);
         }
 
     }
